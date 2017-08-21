@@ -1,7 +1,12 @@
 class MensagemView extends View{
 	
-	template(conteudo){
-			return `<p class="alert alert-success"> ${conteudo.texto} </p>`;
+	
+	template(conteudo, classe){
+			return `<p class="alert ${classe}"> ${conteudo.texto} </p>`;
 	}
 
+
+	update(conteudo, classe){
+		this._elemento.innerHTML = this.template(conteudo, classe);
+	}
 }
