@@ -32,6 +32,9 @@
     </form>
     
     <div class="text-center">
+
+        
+
         <button class="btn btn-primary text-center" type="button">
             Importar Negociações
         </button>
@@ -41,17 +44,23 @@
     </div> 
     <br>
     <br>
-    
+    <div id="mensagemView"></div>
     <div id="negociacaoView"></div>
 
     <script type="text/javascript" src="app/models/Negociacao.js"></script>
     <script type="text/javascript" src="app/models/NegociacaoList.js"></script>
     <script type="text/javascript" src="app/controllers/NegociacaoController.js"></script>
     <script type="text/javascript" src="app/helpers/DateHelper.js"></script>
+    <script type="text/javascript" src="app/views/View.js"></script>
     <script type="text/javascript" src="app/views/NegociacoesView.js"></script>
-    
+    <script type="text/javascript" src="app/models/Mensagem.js"></script>
+    <script type="text/javascript" src="app/views/MensagemView.js"></script>
+    <script type="text/javascript" src="app/models/Conta.js"></script>
+    <script type="text/javascript" src="app/models/ContaCorrente.js"></script>
+    <script type="text/javascript" src="app/models/ContaPoupanca.js"></script>
+
     <script type="text/javascript">
-        let negociacaoController = new NegociacaoController();
+        let negociacaoController = new NegociacaoController();        
     </script>
 </body>
 </html>
