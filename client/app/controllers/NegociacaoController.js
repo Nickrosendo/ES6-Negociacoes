@@ -4,19 +4,11 @@ class NegociacaoController {
 		let $ = document.querySelector.bind(document);
 		this._data = $("#data");
 		this._quantidade = $("#quantidade");
-    this._valor = $("#valor");
-    this._listaNegociacoes = ProxyFactory.create( 
-      new NegociacaoList(),
-      ['add', 'limpaNegociacoes'],
-      (model) => this._negociacaoView.update(model)
-    );
-		this._negociacaoView = new NegociacoesView($('#negociacaoView'));
-		this._mensagem =  ProxyFactory.create( 
-      new Mensagem(),
-      ['texto'],
-      (model) => this._mensagemView.update(model)
-    );
+	    this._valor = $("#valor");
+	    this._negociacaoView = new NegociacoesView($('#negociacaoView'));
+	    this._listaNegociacoes = new Bind( new NegociacaoList(), this._negociacaoView, ['add', 'limpaNegociacoes']);
 		this._mensagemView = new MensagemView($('#mensagemView'));
+		this._mensagem = new Bind( new Mensagem(), this._mensagemView, ['texto', 'classe']);
 		
 	}
 
@@ -26,6 +18,7 @@ class NegociacaoController {
 		this._listaNegociacoes.add(this._criaNegociacao());
 
 		this._mensagem.texto = "Negociação adicionada com sucesso !";
+		this._mensagem.classe = "alert alert-success";
 		
 
 		this._limpaForm();
@@ -36,8 +29,10 @@ class NegociacaoController {
 		this._listaNegociacoes.limpaNegociacoes();
 
 		this._mensagem.texto = " Negociações apagadas com sucesso !";
+		this._mensagem.classe = "alert alert-danger";
 		
-	}
+  }
+  
 
 	_criaNegociacao() {
 		return new Negociacao(DateHelper.StringToDate(this._data.value), this._quantidade.value, this._valor.value);

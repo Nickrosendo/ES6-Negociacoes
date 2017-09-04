@@ -28,7 +28,7 @@ class NegociacoesView extends View{
         <tfoot>
         	<td colspan = "3"></td>
         	<td>
-						${conteudo.negociacao.reduce( (total,n) => total + n.volume , 0)}
+						${conteudo.volume}
         	</td>
         </tfoot>
     </table>
