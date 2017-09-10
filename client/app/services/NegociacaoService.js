@@ -1,130 +1,66 @@
 class NegociacaoService {
 
-	 getAllNegociacoes(callback){
-        let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'negociacoes/semana');
-
-		xhr.onreadystatechange = () => {
-			if(xhr.readyState == 4) 
-				if(xhr.status == 200) {
-                    callback(null,  
-                        JSON.parse(xhr.responseText).map( ( item ) => new Negociacao(new Date(item.data), item.quantidade, item.valor))
-                    );
-					
-				}	
-				else{
-                    
-                    console.log(xhr.responseText);
-					callback("Não foi possível importar as negociações", null);
-				}	
-		}
-
-		xhr.send();
-
-		let xhr2 = new XMLHttpRequest();
-		xhr2.open('GET', 'negociacoes/anterior');
-		xhr2.onreadystatechange = () => {
-			if(xhr2.readyState == 4) 
-				if(xhr2.status == 200) {
-                    callback(null,  
-                        JSON.parse(xhr2.responseText).map( ( item ) => new Negociacao(new Date(item.data), item.quantidade, item.valor))
-                    );
-					
-				}	
-				else{
-                    
-                    console.log(xhr2.responseText);
-					callback("Não foi possível importar as negociações", null);
-				}	
-		}
-
-		xhr2.send();
-
-		let xhr3 = new XMLHttpRequest();
-		xhr3.open('GET', 'negociacoes/retrasada');
-		xhr3.onreadystatechange = () => {
-			if(xhr3.readyState == 4) 
-				if(xhr3.status == 200) {
-                    callback(null,  
-                        JSON.parse(xhr3.responseText).map( ( item ) => new Negociacao(new Date(item.data), item.quantidade, item.valor))
-                    );
-					
-				}	
-				else{
-                    
-                    console.log(xhr3.responseText);
-					callback("Não foi possível importar as negociações", null);
-				}	
-		}
-
-		xhr3.send();
+	constructor(){
+		this._http = new HttpService();
 	}
-	
-	getNegociacaoSemana(callback){
-        let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'negociacoes/semana');
 
-		xhr.onreadystatechange = () => {
-			if(xhr.readyState == 4) 
-				if(xhr.status == 200) {
-                    callback(null,  
-                        JSON.parse(xhr.responseText).map( ( item ) => new Negociacao(new Date(item.data), item.quantidade, item.valor))
-                    );
-					
-				}	
-				else{
-                    
-                    console.log(xhr.responseText);
-					callback("Não foi possível importar as negociações", null);
-				}	
-		}
 
-		xhr.send();
+	getNegociacoes() {
+
+		return Promise.all([
+			 this.getNegociacaoSemana(),
+			 this.getNegociacaoSemanaPassada(),
+			 this.getNegociacaoSemanaRetrasada()
+		]).then(periodos => {
+
+			let negociacoes = periodos
+					.reduce((dados, periodo) => dados.concat(periodo), []);
+			return negociacoes;
+			}).catch(erro => {
+					throw new Error(erro);
+			});
 	}
-	
-	 getNegociacaoSemanaPassada(callback){
-        let xhr = new XMLHttpRequest();
 
-		xhr.open('GET', 'negociacoes/anterior');
+	getNegociacaoSemana() {
 
-		xhr.onreadystatechange = () => {
-			if(xhr.readyState == 4) 
-				if(xhr.status == 200) {
-                    callback(null,  
-                        JSON.parse(xhr.responseText).map( ( item ) => new Negociacao(new Date(item.data), item.quantidade, item.valor))
-                    );
-					
-				}	
-				else{
-                    
-                    console.log(xhr.responseText);
-					callback("Não foi possível importar as negociações", null);
-				}	
-		}
+		return this._http
+				.get('negociacoes/semana')
+					.then( negociacoes => {
+						return negociacoes.map((item) => new Negociacao(new Date(item.data), item.quantidade, item.valor));
+					})
+					.catch( erro => {
+						console.log(erro);
+						throw new Error("Não foi possível importar as negociações da semana");
+					});
 
-		xhr.send();
 	}
-	
-	 getNegociacaoSemanaRetrasada(callback){
-		let xhr = new XMLHttpRequest();
+
+	getNegociacaoSemanaPassada() {
+
+		return this._http
+				.get('negociacoes/anterior')
+					.then( negociacoes => {
+						return negociacoes.map((item) => new Negociacao(new Date(item.data), item.quantidade, item.valor));
+					})
+					.catch( erro => {
+						console.log(erro);
+						throw new Error("Não foi possível importar as negociações da semana anterior");
+					});
+
+	}
+
+	getNegociacaoSemanaRetrasada() {
 		
-		xhr.open('GET', 'negociacoes/retrasada');
+			return this._http
+				.get('negociacoes/retrasada')
+					.then( negociacoes => {
+						return negociacoes.map((item) => new Negociacao(new Date(item.data), item.quantidade, item.valor));
+					})
+					.catch( erro => {
+						console.log(erro);
+						throw new Error("Não foi possível importar as negociações da semana retrasada");
+					});
 
-		xhr.onreadystatechange = () => {
-			if(xhr.readyState == 4) 
-				if(xhr.status == 200) {
-                    callback(null,  
-                        JSON.parse(xhr.responseText).map( ( item ) => new Negociacao(new Date(item.data), item.quantidade, item.valor))
-                    );
-					
-				}	
-				else{
-                    
-                    console.log(xhr.responseText);
-					callback("Não foi possível importar as negociações", null);
-				}	
-		}
+	}
 
-		xhr.send();
-    }
 }

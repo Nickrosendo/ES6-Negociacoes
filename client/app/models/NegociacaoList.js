@@ -20,9 +20,17 @@ class NegociacaoList{
 		return [].concat(this._negociacoes);
 	}
 
-	limpaNegociacoes() {
+	clear() {
 
 		this._negociacoes = [];
 		
+	}
+
+	ordena( criterio) {
+		this._negociacoes.sort(criterio);
+	}
+
+	ordenaReverso() {
+		this._negociacoes.reverse();
 	}
 }

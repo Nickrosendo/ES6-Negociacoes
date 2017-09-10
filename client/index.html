@@ -10,6 +10,9 @@
 		a:hover{
 			cursor: pointer;
 		}
+		th:hover{
+			cursor: pointer;
+		}
 	</style>
 
 </head>
@@ -22,7 +25,7 @@
 
 		<div class="form-group">
 			<label for="data">Data</label>
-			<input type="date" id="data" class="form-control" required autofocus/>
+			<input type="text" placeholder="dd/mm/aaaa" id="data" class="form-control" required autofocus/>  
 		</div>
 
 		<div class="form-group">
@@ -79,11 +82,12 @@
 	<script type="text/javascript" src="app/models/ContaPoupanca.js"></script>
 	<script type="text/javascript" src="app/services/ProxyFactory.js"></script>
 	<script type="text/javascript" src="app/services/NegociacaoService.js"></script>
+	<script type="text/javascript" src="app/services/HttpService.js"></script>
 	
 
 
 	<script type="text/javascript">
-		let negociacaoController = new NegociacaoController();
+		var negociacaoController = new NegociacaoController();
 	</script>
 
 </body>
