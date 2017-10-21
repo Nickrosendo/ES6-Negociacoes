@@ -10,24 +10,43 @@ class NegociacaoController {
 		this._mensagemView = new MensagemView($('#mensagemView'));
 		this._mensagem = new Bind(new Mensagem(), this._mensagemView, ['texto', 'classe']);
 		this._ordemAtual = '';
+
+		ConnectionFactory
+			.getConnection()
+			.then( connection => new NegociacaoDao(connection, 'negociacoes'))
+			.then( dao => dao.listaTodos())
+			.then( negociacoes => 
+				negociacoes.forEach(negociacao =>
+					this._listaNegociacoes.add(negociacao)
+				)
+			)
+			.catch( erro => {
+				console.log(erro);
+				this._mensagem.texto = erro;
+				this._mensagem.classe = "alert alert-danger";
+			})
 	}
 
 	add(event) {
 		event.preventDefault();
 
-		try{
-
-			this._listaNegociacoes.add(this._criaNegociacao());
-
-			this._mensagem.texto = "Negociação adicionada com sucesso !";
-			this._mensagem.classe = "alert alert-success";
-
-			this._limpaForm();
-		}catch( erro)	 {
+		ConnectionFactory.
+			getConnection()
+				.then( connection => {
+					let negociacao = this._criaNegociacao();
+					
+					new NegociacaoDao( connection, 'negociacoes')
+						.adiciona(negociacao)
+							.then( () => {
+								this._listaNegociacoes.add(negociacao);
+								this._mensagem.texto = "Negociação adicionada com sucesso !";
+								this._mensagem.classe = "alert alert-success";
+								this._limpaForm();
+							})
+				}).catch( erro => {
 			this._mensagem.texto = erro;
 			this._mensagem.classe = "alert alert-danger";
-		}
-
+		});
 	}
 
 	importaAllNegociacoes() {
@@ -88,11 +107,20 @@ class NegociacaoController {
 	}
 
 	apaga() {
-		this._listaNegociacoes.clear();
 
-		this._mensagem.texto = " Negociações apagadas com sucesso !";
-		this._mensagem.classe = "alert alert-danger";
-
+		ConnectionFactory
+			.getConnection()
+			.then( connection => new NegociacaoDao(connection, 'negociacoes'))
+			.then( dao => dao.apagaTodos())
+			.then( mensagem => {
+				this._mensagem.texto = mensagem;
+				this._mensagem.classe = "alert alert-warning";
+				this._listaNegociacoes.clear();
+			}).catch( erro => {
+				this._mensagem.texto = erro;
+				this._mensagem.classe = "alert alert-danger";
+			})
+		
 	}
 
 	ordena( coluna ) {
@@ -105,7 +133,11 @@ class NegociacaoController {
 	}
 
 	_criaNegociacao() {
-		return new Negociacao(DateHelper.StringToDate(this._data.value), this._quantidade.value, this._valor.value);
+		return new Negociacao(
+			DateHelper.StringToDate(this._data.value),
+			parseInt(this._quantidade.value),
+			parseFloat(this._valor.value)
+		);
 	}
 
 	_limpaForm() {
