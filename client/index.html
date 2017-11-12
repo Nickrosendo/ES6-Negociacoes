@@ -21,7 +21,7 @@
 
 	<h1 class="text-center">Negociações</h1>
 
-	<form class="form" onsubmit="negociacaoController.add(event)">
+	<form class="form">
 
 		<div class="form-group">
 			<label for="data">Data</label>
@@ -49,15 +49,15 @@
    				 Importar Negociações <span class="caret"></span>
   		</button>
 			<ul class="dropdown-menu">
-				<li onclick="negociacaoController.importaAllNegociacoes()"><a>Todas</a></li>
-				<li onclick="negociacaoController.importaEssaSemanaNegociacoes()"><a >Essa semana</a></li>
-				<li onclick="negociacaoController.importaSemanaPassadaNegociacoes()"><a >Semana passada</a></li>
-				<li onclick="negociacaoController.importaSemanaRetrasadaNegociacoes()"><a >Semana retrasada</a></li>
+				<li id="importarTodas"><a>Todas</a></li>
+				<li id="importarEssaSemana"><a >Essa semana</a></li>
+				<li id="importarSemanaPassada"><a >Semana passada</a></li>
+				<li id="importarSemanaRetrasada"><a >Semana retrasada</a></li>
 				<li role="separator" class="divider"></li>
 			</ul>
 		</div>
 
-		<button onclick="negociacaoController.apaga()" class="btn btn-primary text-center" type="button">
+		<button id="btn_apagar" class="btn btn-primary text-center" type="button">
             Apagar
         </button>
 	</div>
@@ -65,31 +65,14 @@
 	<br>
 	<div id="mensagemView"></div>
 	<div id="negociacaoView"></div>
-
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="./bootstrap.min.js"></script>
-	<script type="text/javascript" src="app/models/Negociacao.js"></script>
-	<script type="text/javascript" src="app/models/NegociacaoList.js"></script>
-	<script type="text/javascript" src="app/controllers/NegociacaoController.js"></script>
-	<script type="text/javascript" src="app/helpers/DateHelper.js"></script>
-	<script type="text/javascript" src="app/helpers/Bind.js"></script>
-	<script type="text/javascript" src="app/views/View.js"></script>
-	<script type="text/javascript" src="app/views/NegociacoesView.js"></script>
-	<script type="text/javascript" src="app/models/Mensagem.js"></script>
-	<script type="text/javascript" src="app/views/MensagemView.js"></script>
-	<script type="text/javascript" src="app/models/Conta.js"></script>
-	<script type="text/javascript" src="app/models/ContaCorrente.js"></script>
-	<script type="text/javascript" src="app/models/ContaPoupanca.js"></script>
-	<script type="text/javascript" src="app/services/ProxyFactory.js"></script>
-	<script type="text/javascript" src="app/services/NegociacaoService.js"></script>
-	<script type="text/javascript" src="app/services/HttpService.js"></script>
-	<script type="text/javascript" src="app/services/ConnectionFactory.js"></script>
-	<script type="text/javascript" src="app/dao/NegociacaoDao.js"></script>
-	
-
-
-	<script type="text/javascript">
-		var negociacaoController = new NegociacaoController();
+	<script src="node_modules/systemjs/dist/system.js"></script>
+	<script>
+		System.defaultJSExtensions = true;
+		System.import('js/app/boot').catch(function(erro) {
+			console.log(erro);
+		}) 
 	</script>
 
 </body>
